@@ -1,17 +1,30 @@
 import SearchBar from '../components/SearchBar';
 import hero from '../assets/hero.jpg';
 import Header from '../components/Header';
-import RecipesList from '../components/ReciepesList';
+import RecipesList from '../components/RecipesList';
 import type { Recipe } from '../types/recipe';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getRandomRecipes } from '../../services/recipeService';
+import Footer from '../components/Footer';
 
-interface HomePageProps {
-  fetchedRecipes: Recipe[];
-  setFetchedRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>;
-}
+export default function HomePage() {
+  const [fetchedRecipes, setFetchedRecipes] = useState<Recipe[]>([]);
+  const [listTitle, setListTitle] = useState('');
 
-export default function HomePage({ fetchedRecipes, setFetchedRecipes }: HomePageProps) {
-  const [searchText, setSearchText] = useState('');
+  useEffect(() => {
+    async function renderPopularRecipes() {
+      try {
+        const data = await getRandomRecipes();
+        setFetchedRecipes(data);
+        setListTitle('Popular Recipes');
+      } catch (error) {
+        console.error('Error rendering popular recipes:', error);
+      }
+    }
+
+    renderPopularRecipes();
+  }, []);
+
   return (
     <div>
       <div
@@ -22,18 +35,19 @@ export default function HomePage({ fetchedRecipes, setFetchedRecipes }: HomePage
           backgroundBlendMode: 'darken',
         }}>
         <div className="w-[1440px] mt-12">
-          <Header />
+          <Header logoColor="text-white" />
         </div>
         <div className="w-1/3 my-auto">
           <h2 className="text-4xl font-semibold text-white text-center drop-shadow-lg mb-10">
             Find the Perfect Recipe with What’s Already in Your Fridge
           </h2>
-          <SearchBar setFetchedRecipes={setFetchedRecipes} setSearchText={setSearchText} />
+          <SearchBar setFetchedRecipes={setFetchedRecipes} setListTitle={setListTitle} />
         </div>
       </div>
-      <div className="max-w-5xl mx-auto pt-16">
-        <RecipesList fetchedRecipes={fetchedRecipes} searchText={searchText} />
+      <div className="max-w-5xl mx-auto pt-16 mb-10">
+        <RecipesList fetchedRecipes={fetchedRecipes} listTitle={listTitle} />
       </div>
+      <Footer />
     </div>
   );
 }

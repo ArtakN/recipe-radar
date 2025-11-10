@@ -3,12 +3,12 @@ import { getRecipes } from '../../services/recipeService';
 import { Search } from 'lucide-react';
 import type { Recipe } from '../types/recipe';
 
-interface SerchBarProps {
+interface SearchBarProps {
   setFetchedRecipes: React.Dispatch<React.SetStateAction<Recipe[]>>;
-  setSearchText: React.Dispatch<React.SetStateAction<string>>;
+  setListTitle: React.Dispatch<React.SetStateAction<string>>;
 }
 
-export default function SearchBar({ setFetchedRecipes, setSearchText }: SerchBarProps) {
+export default function SearchBar({ setFetchedRecipes, setListTitle }: SearchBarProps) {
   const [ingredients, setIngredients] = useState('');
   const [loading, setLoading] = useState(false);
 
@@ -18,7 +18,7 @@ export default function SearchBar({ setFetchedRecipes, setSearchText }: SerchBar
       setLoading(true);
       const data = await getRecipes(ingredients);
       setFetchedRecipes(data);
-      setSearchText(ingredients);
+      setListTitle(`Search results for '${ingredients}'`);
       setIngredients('');
     } catch (error) {
       console.log('Error fetching recipes:', error);

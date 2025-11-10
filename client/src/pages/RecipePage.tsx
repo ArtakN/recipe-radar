@@ -1,56 +1,159 @@
 import Header from '../components/Header';
 import { Clock, Flame } from 'lucide-react';
-import type { Recipe } from '../types/recipe';
 import { useParams } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { getRecipeDetails } from '../../services/recipeService';
+import type { Recipe, ExtendedIngredient, InstructionStep } from '../types/recipe';
 
-interface RecipePageProps {
-  fetchedRecipes: Recipe[];
-}
-
-export default function RecipePage({ fetchedRecipes }: RecipePageProps) {
+export default function RecipePage() {
+  const [recipeDetails, setRecipeDetails] = useState<Recipe | null>(null);
   const { id } = useParams<{ id: string }>();
 
-  const recipe = fetchedRecipes.find((el) => el.id === Number(id));
+  console.log(recipeDetails);
+
+  useEffect(() => {
+    async function loadRecipeDetails() {
+      try {
+        if (!id) return;
+        const data = await getRecipeDetails(Number(id));
+        setRecipeDetails(data);
+      } catch (error) {
+        console.error('Error fetching recipe details:', error);
+      }
+    }
+
+    loadRecipeDetails();
+  }, [id]);
+
+  const calories =
+    recipeDetails?.nutrition?.nutrients?.find((n) => n.name === 'Calories')?.amount ?? 'N/A';
+
   return (
-    <div>
-      <div className="bg-emerald-500 min-h-72">
-        <div className="w-[1440px] pt-12 mx-auto">
-          <Header />
+    <div className="min-h-screen bg-white">
+      <div className="shadow-sm">
+        <div className="container mx-auto px-4 py-4 ">
+          <Header logoColor="text-gray-800" />
         </div>
       </div>
-      <div className="flex w-5xl justify-between mx-auto absolute top-50 left-1/2 -translate-x-1/2 gap-16">
-        <div>
-          <div className="flex items-center text-lg text-white gap-6 mt-8">
-            <div className="flex items-center gap-2">
-              <Clock className="w-6 h-6" />
-              <p>
-                <span className="text-4xl font-bold mr-1"> 30</span>min
-              </p>
+
+      <div className="container mx-auto px-4 py-10 w-6xl">
+        <div className="flex flex-col lg:flex-row gap-8 mb-12  justify-between items-start">
+          <div className="lg:flex-1">
+            <div className="flex items-center text-lg text-emerald-700 gap-6 mb-8">
+              <div className="flex items-center gap-2">
+                <Clock className="w-6 h-6" />
+                <p>
+                  <span className="text-3xl font-bold mr-1">{recipeDetails?.readyInMinutes}</span>
+                  min
+                </p>
+              </div>
+              <div className="flex items-center gap-2">
+                <Flame className="w-6 h-6" />
+                <p>
+                  <span className="text-3xl font-bold mr-1">{calories}</span> Calories
+                </p>
+              </div>
             </div>
-            <div className="flex items-center gap-2">
-              <Flame className="w-6 h-6" />
-              <p>
-                <span className="text-4xl font-bold mr-1"> 376</span> Calories
-              </p>
-            </div>
+            <h1 className="text-4xl lg:text-5xl font-bold mb-6">{recipeDetails?.title}</h1>
+            <div
+              className="text-lg text-gray-700 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: recipeDetails?.summary || '' }}
+            />
           </div>
-          <h1 className="text-6xl font-bold mt-12 leading-16 mb">{recipe?.title}</h1>
-          <p className="mt-10">
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatibus ducimus optio in
-            voluptatem minima, eligendi porro, perspiciatis ad, voluptates doloremque impedit est
-            nostrum eius deserunt iste quaerat odit. Deserunt quis tempore aliquid, voluptatem
-            excepturi autem quam sequi reprehenderit expedita eaque dicta nihil facere, corporis
-            repellendus est, nulla rem ipsa velit.
-          </p>
-          <div className="border mt-12">
-            <p>Ingredients</p>
+
+          <div className="lg:w-[500px] flex justify-center lg:justify-end">
+            <img
+              src={recipeDetails?.image}
+              alt="recipe-image"
+              className="w-[500px] h-[700px] rounded-2xl object-cover shadow-lg"
+              style={{
+                width: '500px',
+                height: '700px',
+                objectFit: 'cover',
+              }}
+            />
           </div>
         </div>
-        <img
-          src={recipe?.image}
-          alt="recipe-image"
-          className="h-[700px] w-md rounded-2xl object-cover"
-        />
+
+        {recipeDetails?.extendedIngredients && (
+          <div className="mb-12">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-3xl font-bold">Ingredients</h2>
+              <p className="text-gray-600">
+                {recipeDetails.extendedIngredients.length} ingredients
+              </p>
+            </div>
+
+            <div className="bg-white rounded-2xl p-6 shadow-sm ">
+              <div className="grid gap-4">
+                {recipeDetails.extendedIngredients.map((ingredient: ExtendedIngredient) => (
+                  <div
+                    key={ingredient.id}
+                    className="flex items-center gap-4 p-3 bg-gray-50 rounded-lg">
+                    <img
+                      src={`https://img.spoonacular.com/ingredients_100x100/${ingredient.image}`}
+                      alt={ingredient.name}
+                      className="w-12 h-12 object-cover rounded-full"
+                    />
+                    <div className="flex-1">
+                      <p className="font-medium text-gray-800">
+                        {ingredient.nameClean || ingredient.name}
+                      </p>
+                      <p className="text-sm text-gray-600">{ingredient.original}</p>
+                    </div>
+                    <div className="text-right">
+                      <p className="font-semibold text-gray-900">
+                        {ingredient.amount} {ingredient.unit}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
+
+        {recipeDetails?.analyzedInstructions?.[0]?.steps && (
+          <div className="mb-12">
+            <h2 className="text-3xl font-bold mb-6">Recipe Steps</h2>
+            <div className="bg-white rounded-2xl p-6 shadow-sm ">
+              <div className="space-y-6">
+                {recipeDetails.analyzedInstructions[0].steps.map((step: InstructionStep) => (
+                  <div key={step.number} className="flex gap-4">
+                    <div className="shrink-0 w-8 h-8 bg-emerald-500 text-white rounded-full flex items-center justify-center font-bold">
+                      {step.number}
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-lg mb-2">{step.step}</p>
+
+                      {step.ingredients && step.ingredients.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-2">
+                          <span className="text-sm text-gray-600">Ingredients: </span>
+                          {step.ingredients.map((ingredient, index: number) => (
+                            <span key={index} className="text-sm bg-gray-100 px-2 py-1 rounded">
+                              {ingredient.localizedName}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+
+                      {step.equipment && step.equipment.length > 0 && (
+                        <div className="flex flex-wrap gap-2 mt-1">
+                          <span className="text-sm text-gray-600">Equipment: </span>
+                          {step.equipment.map((equip, index: number) => (
+                            <span key={index} className="text-sm bg-blue-100 px-2 py-1 rounded">
+                              {equip.localizedName}
+                            </span>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );
