@@ -37,6 +37,7 @@ export default function HomePage() {
         <div className="w-[1440px] mt-12">
           <Header logoColor="text-white" />
         </div>
+        {/* Hero section */}
         <div className="w-1/3 my-auto">
           <h2 className="text-4xl font-semibold text-white text-center drop-shadow-lg mb-10">
             Find the Perfect Recipe with What’s Already in Your Fridge

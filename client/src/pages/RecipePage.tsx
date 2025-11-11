@@ -37,9 +37,10 @@ export default function RecipePage() {
       </div>
 
       <div className="container mx-auto px-4 py-10 w-6xl">
-        <div className="flex flex-col lg:flex-row gap-8 mb-12  justify-between items-start">
+        <div className="flex flex-row gap-8 mb-12  justify-between items-start">
           <div className="lg:flex-1">
             <div className="flex items-center text-lg text-emerald-700 gap-6 mb-8">
+              {/* Time */}
               <div className="flex items-center gap-2">
                 <Clock className="w-6 h-6" />
                 <p>
@@ -47,6 +48,7 @@ export default function RecipePage() {
                   min
                 </p>
               </div>
+              {/* Calories */}
               <div className="flex items-center gap-2">
                 <Flame className="w-6 h-6" />
                 <p>
@@ -54,14 +56,17 @@ export default function RecipePage() {
                 </p>
               </div>
             </div>
-            <h1 className="text-4xl lg:text-5xl font-bold mb-6">{recipeDetails?.title}</h1>
+            {/* Title */}
+            <h1 className="text-5xl font-bold mb-6">{recipeDetails?.title}</h1>
+            {/* Descripton */}
             <div
               className="text-lg text-gray-700 leading-relaxed"
               dangerouslySetInnerHTML={{ __html: recipeDetails?.summary || '' }}
             />
           </div>
 
-          <div className="lg:w-[500px] flex justify-center lg:justify-end">
+          {/* Main image */}
+          <div className="w-[500px] flex justify-end">
             <img
               src={recipeDetails?.image}
               alt="recipe-image"
@@ -75,6 +80,7 @@ export default function RecipePage() {
           </div>
         </div>
 
+        {/* Ingridinets */}
         {recipeDetails?.extendedIngredients && (
           <div className="mb-12">
             <div className="flex items-center justify-between mb-6">
@@ -113,6 +119,7 @@ export default function RecipePage() {
           </div>
         )}
 
+        {/* Instructon */}
         {recipeDetails?.analyzedInstructions?.[0]?.steps && (
           <div className="mb-12">
             <h2 className="text-3xl font-bold mb-6">Recipe Steps</h2>

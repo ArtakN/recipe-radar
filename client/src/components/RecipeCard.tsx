@@ -29,7 +29,9 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
       <div className="p-4 pb-5 flex flex-col grow justify-between">
         <h2 className="text-xl font-semibold mb-4">{recipe.title}</h2>
 
+        {/* Rating */}
         <div className="mt-auto">
+          {/* ToDo - change to like icon */}
           <div className="flex items-center gap-1 mb-4">
             <Star className="text-yellow-400 fill-yellow-400 w-5 h-5" />
             <Star className="text-yellow-400 fill-yellow-400 w-5 h-5" />
@@ -39,6 +41,7 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
             <p className="text-green-600 text-sm ml-2 font-medium">{recipe.likes} ratings</p>
           </div>
 
+          {/* Time & Calories */}
           <div className="flex justify-between items-center">
             <div className="flex items-center text-sm text-gray-600 gap-6">
               {recipe.readyInMinutes && (
@@ -55,6 +58,8 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
               )}
             </div>
           </div>
+
+          {/* Diet tags */}
           <div className="flex flex-wrap gap-2 mt-5">
             {recipe.diets?.slice(0, 3).map((diet) => (
               <span
