@@ -1,5 +1,7 @@
 const baseURL = 'http://localhost:3000';
 
+// Recipes - Resquests to spoonacular API
+
 export async function getRecipes(ingredients: string) {
   try {
     const response = await fetch(`${baseURL}/recipes?ingredients=${ingredients}`);
@@ -29,6 +31,51 @@ export async function getRecipeDetails(id: number) {
     return await response.json();
   } catch (error) {
     console.error('Fetch error (getRecipeDetails):', error);
+    throw error;
+  }
+}
+
+// Favorite Recipes - Requests to local db
+
+export async function postFavoriteRecipe(recipeData: object) {
+  try {
+    const response = await fetch(`${baseURL}/favorites`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(recipeData),
+    });
+
+    if (!response.ok) throw new Error('Failed to save favorite recipe');
+    return await response.json();
+  } catch (error) {
+    console.error('Fetch error (postFavoriteRecipe):', error);
+    throw error;
+  }
+}
+
+export async function getFavorites() {
+  try {
+    const response = await fetch(`${baseURL}/favorites`);
+    if (!response.ok) throw new Error('Failed to fetch favoirtes');
+    return await response.json();
+  } catch (error) {
+    console.error('Fetch error (getFavorites):', error);
+    throw error;
+  }
+}
+
+export async function deleteRecipeFromFavorites(id: number) {
+  try {
+    const response = await fetch(`${baseURL}/favorites/${id}`, {
+      method: 'DELETE',
+    });
+
+    if (!response.ok) throw new Error('Failed to delete favorite recipe');
+    return await response.json();
+  } catch (error) {
+    console.error('Fetch error (deleteRecipeFromFavorites):', error);
     throw error;
   }
 }

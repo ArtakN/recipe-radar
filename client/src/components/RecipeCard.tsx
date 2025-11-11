@@ -6,6 +6,8 @@ interface RecipeCardProps {
   recipe: Recipe;
 }
 
+// TODO: Implement add/delete favorite functionality on recipe card
+
 export default function RecipeCard({ recipe }: RecipeCardProps) {
   const navigate = useNavigate();
   function recipeClickHandler() {
@@ -29,16 +31,16 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
       <div className="p-4 pb-5 flex flex-col grow justify-between">
         <h2 className="text-xl font-semibold mb-4">{recipe.title}</h2>
 
-        {/* Rating */}
         <div className="mt-auto">
-          {/* ToDo - change to like icon */}
-          <div className="flex items-center gap-1 mb-4">
-            <Star className="text-yellow-400 fill-yellow-400 w-5 h-5" />
-            <Star className="text-yellow-400 fill-yellow-400 w-5 h-5" />
-            <Star className="text-yellow-400 fill-yellow-400 w-5 h-5" />
-            <Star className="text-yellow-400 fill-yellow-400 w-5 h-5" />
-            <Star className="text-gray-300 w-5 h-5" />
-            <p className="text-green-600 text-sm ml-2 font-medium">{recipe.likes} ratings</p>
+          <div className="flex items-center mb-4 justify-between">
+            <div className="flex items-center gap-1 ">
+              <Star className="text-yellow-400 fill-yellow-400 w-5 h-5" />
+              <Star className="text-yellow-400 fill-yellow-400 w-5 h-5" />
+              <Star className="text-yellow-400 fill-yellow-400 w-5 h-5" />
+              <Star className="text-yellow-400 fill-yellow-400 w-5 h-5" />
+              <Star className="text-gray-300 w-5 h-5" />
+              <p className="text-green-600 text-sm ml-2 font-medium">{recipe.likes} ratings</p>
+            </div>
           </div>
 
           {/* Time & Calories */}

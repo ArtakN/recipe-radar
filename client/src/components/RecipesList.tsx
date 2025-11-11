@@ -11,7 +11,7 @@ export default function RecipesList({ fetchedRecipes, listTitle }: RecipesListPr
     <div>
       <h2 className="text-5xl font-bold mb-10">{listTitle}</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-10 justify-items-center">
-        {fetchedRecipes.map((recipe: Recipe) => (
+        {fetchedRecipes.map((recipe) => (
           <RecipeCard key={recipe.id} recipe={recipe} />
         ))}
       </div>

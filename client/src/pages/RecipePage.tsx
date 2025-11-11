@@ -1,15 +1,16 @@
 import Header from '../components/Header';
-import { Clock, Flame } from 'lucide-react';
+import { Clock, Flame, Heart } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getRecipeDetails } from '../../services/recipeService';
+import { getRecipeDetails, deleteRecipeFromFavorites } from '../../services/recipeService';
 import type { Recipe, ExtendedIngredient, InstructionStep } from '../types/recipe';
+import { postFavoriteRecipe, getFavorites } from '../../services/recipeService';
 
 export default function RecipePage() {
   const [recipeDetails, setRecipeDetails] = useState<Recipe | null>(null);
-  const { id } = useParams<{ id: string }>();
+  const [isFavorite, setIsVaforite] = useState(false);
 
-  console.log(recipeDetails);
+  const { id } = useParams<{ id: string }>();
 
   useEffect(() => {
     async function loadRecipeDetails() {
@@ -17,6 +18,11 @@ export default function RecipePage() {
         if (!id) return;
         const data = await getRecipeDetails(Number(id));
         setRecipeDetails(data);
+
+        // checking - if the recipe in favorits
+        const favorites = await getFavorites();
+        const inFavroite = favorites.some((recipe: Recipe) => recipe.id === Number(id));
+        setIsVaforite(inFavroite);
       } catch (error) {
         console.error('Error fetching recipe details:', error);
       }
@@ -28,10 +34,28 @@ export default function RecipePage() {
   const calories =
     recipeDetails?.nutrition?.nutrients?.find((n) => n.name === 'Calories')?.amount ?? 'N/A';
 
+  async function favoriteClickHandle() {
+    if (!recipeDetails) return;
+
+    try {
+      if (isFavorite) {
+        await deleteRecipeFromFavorites(recipeDetails.id);
+        console.log('Recipe removed from favorites!');
+        setIsVaforite(false);
+      } else {
+        await postFavoriteRecipe(recipeDetails);
+        console.log('Recipe added to favorites!');
+        setIsVaforite(true);
+      }
+    } catch (error) {
+      console.error('Failed add/delete favorite:', error);
+    }
+  }
+
   return (
     <div className="min-h-screen bg-white">
       <div className="shadow-sm">
-        <div className="container mx-auto px-4 py-4 ">
+        <div className=" mx-auto px-50 py-4 shadow-sm w-full">
           <Header logoColor="text-gray-800" />
         </div>
       </div>
@@ -40,20 +64,30 @@ export default function RecipePage() {
         <div className="flex flex-row gap-8 mb-12  justify-between items-start">
           <div className="lg:flex-1">
             <div className="flex items-center text-lg text-emerald-700 gap-6 mb-8">
-              {/* Time */}
-              <div className="flex items-center gap-2">
-                <Clock className="w-6 h-6" />
-                <p>
-                  <span className="text-3xl font-bold mr-1">{recipeDetails?.readyInMinutes}</span>
-                  min
-                </p>
-              </div>
-              {/* Calories */}
-              <div className="flex items-center gap-2">
-                <Flame className="w-6 h-6" />
-                <p>
-                  <span className="text-3xl font-bold mr-1">{calories}</span> Calories
-                </p>
+              <div className="flex w-full">
+                {/* Time */}
+                <div className="flex items-center gap-2">
+                  <Clock className="w-6 h-6" />
+                  <p>
+                    <span className="text-3xl font-bold mr-1">{recipeDetails?.readyInMinutes}</span>
+                    min
+                  </p>
+                </div>
+                {/* Calories */}
+                <div className="flex items-center gap-2">
+                  <Flame className="w-6 h-6" />
+                  <p>
+                    <span className="text-3xl font-bold mr-1">{calories}</span> Calories
+                  </p>
+                </div>
+                {/* Favorite */}
+                <div onClick={favoriteClickHandle} className="ml-auto">
+                  <Heart
+                    className={` ${
+                      isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-500'
+                    }  transition-colors duration-200 cursor-pointer w-10 h-10 hover:text-red-500`}
+                  />
+                </div>
               </div>
             </div>
             {/* Title */}

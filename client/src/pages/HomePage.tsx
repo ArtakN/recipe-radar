@@ -12,7 +12,7 @@ export default function HomePage() {
   const [listTitle, setListTitle] = useState('');
 
   useEffect(() => {
-    async function renderPopularRecipes() {
+    async function loadPopularRecipes() {
       try {
         const data = await getRandomRecipes();
         setFetchedRecipes(data);
@@ -22,7 +22,7 @@ export default function HomePage() {
       }
     }
 
-    renderPopularRecipes();
+    loadPopularRecipes();
   }, []);
 
   return (
@@ -34,7 +34,7 @@ export default function HomePage() {
           backgroundColor: 'rgba(0, 0, 0, 0.55)',
           backgroundBlendMode: 'darken',
         }}>
-        <div className="w-[1440px] mt-12">
+        <div className=" mx-auto px-50 pt-10 w-full">
           <Header logoColor="text-white" />
         </div>
         {/* Hero section */}
