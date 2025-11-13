@@ -1,18 +1,16 @@
 import { Request, Response } from 'express';
 import 'dotenv/config';
+import { validationResult } from 'express-validator';
 
 const apiKey = process.env.SPOON_API_KEY;
 
 export async function getRecipes(req: Request, res: Response) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array()});
+  }
+
   const ingredients = req.query.ingredients as string;
-
-  if (!ingredients) {
-    return res.status(400).json({ error: 'Missing ingredients' });
-  }
-
-  if (!apiKey) {
-    return res.status(500).json({ error: 'Missing API key' });
-  }
 
   try {
     const response = await fetch(
@@ -35,11 +33,12 @@ export async function getRecipes(req: Request, res: Response) {
 
 // get random recipes
 export async function getRandomRecipes(req: Request, res: Response) {
-  const apiKey = process.env.SPOON_API_KEY;
-
-  if (!apiKey) {
-    return res.status(500).json({ error: 'Missing API key' });
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array()});
   }
+  //TODO remove unnecesary apiKey
+  const apiKey = process.env.SPOON_API_KEY;
 
   try {
     const response = await fetch(
@@ -60,6 +59,12 @@ export async function getRandomRecipes(req: Request, res: Response) {
 
 // get single recipe details
 export async function getRecipeDetails(req: Request, res: Response) {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array()});
+  }
+
+  //TODO remove unnecesary call to apiKEY
   const apiKey = process.env.SPOON_API_KEY;
   const { id } = req.params;
 
