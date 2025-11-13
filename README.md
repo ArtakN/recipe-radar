@@ -1,6 +1,7 @@
 # 🍳 Recipe Radar
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-**Recipe Radar** is a full-stack web app that helps you discover new meals  
+**Recipe Radar** is a full-stack web app that helps you discover new meals
 based on the ingredients you already have — powered by the [Spoonacular API](https://spoonacular.com/food-api).
 
 ---
