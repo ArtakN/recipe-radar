@@ -5,6 +5,7 @@ import { validationResult } from 'express-validator';
 // post a favorite recipe
 export async function addFavorite(req: Request, res: Response) {
   const errors = validationResult(req);
+  console.log(errors);
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array()});
   }

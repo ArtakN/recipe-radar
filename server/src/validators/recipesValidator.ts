@@ -32,7 +32,7 @@ export const IdValidator = [
 
 export const RecipeValidator = [
     body('id').trim().isNumeric().notEmpty().withMessage('Missing or not numeric id'),
-    body('tittle').trim().isString().notEmpty().withMessage('Missing or wrong Title'),
+    body('title').trim().isString().notEmpty().withMessage('Missing or wrong Title'),
     body('image').trim().isString().notEmpty().withMessage('Missing or wrong img'),
     body('readyInMinutes').optional().trim().isNumeric().withMessage('wrong readyInMinutes'),
     body('imageType').optional().trim().isString().withMessage('wrong imageType'),

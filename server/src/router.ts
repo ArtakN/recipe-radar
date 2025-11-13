@@ -7,7 +7,7 @@ import { IdValidator, IngredientsValidator, RecipeValidator } from './validators
 
 const router = Router();
 // Recipes
-router.get('/recipes',ApiKeiValidator, IngredientsValidator, getRecipes);
+router.get('/recipes', IngredientsValidator,ApiKeiValidator, getRecipes);
 router.get('/recipes/random',ApiKeiValidator, getRandomRecipes);
 router.get('/recipes/:id',IdValidator, getRecipeDetails);
 

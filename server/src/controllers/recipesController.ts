@@ -5,17 +5,21 @@ import { validationResult } from 'express-validator';
 const apiKey = process.env.SPOON_API_KEY;
 
 export async function getRecipes(req: Request, res: Response) {
+
   const errors = validationResult(req);
+  console.log(errors);
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array()});
   }
 
   const ingredients = req.query.ingredients as string;
 
+  
   try {
+    console.log(ingredients);
     const response = await fetch(
       `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${encodeURIComponent(
-        ingredients,
+        ingredients
       )}&number=6&apiKey=${apiKey}`,
     );
 
