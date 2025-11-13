@@ -64,6 +64,6 @@ npm run dev
 
 Create `.env` in `/server`:
 
-SPOONACULAR_API_KEY=your_api_key_here
+SPOON_API_KEY=your_api_key_here
 
 You can get an API key here: https://spoonacular.com/food-api/console#Profile
