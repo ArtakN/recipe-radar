@@ -14,7 +14,6 @@ export async function getRecipes(req: Request, res: Response) {
 
   const ingredients = req.query.ingredients as string;
 
-  
   try {
     console.log(ingredients);
     const response = await fetch(
@@ -41,8 +40,6 @@ export async function getRandomRecipes(req: Request, res: Response) {
   if (!errors.isEmpty()) {
     return res.status(400).send({ errors: errors.array()});
   }
-  //TODO remove unnecesary apiKey
-  const apiKey = process.env.SPOON_API_KEY;
 
   try {
     const response = await fetch(
@@ -68,8 +65,6 @@ export async function getRecipeDetails(req: Request, res: Response) {
     return res.status(400).send({ errors: errors.array()});
   }
 
-  //TODO remove unnecesary call to apiKEY
-  const apiKey = process.env.SPOON_API_KEY;
   const { id } = req.params;
 
   try {
