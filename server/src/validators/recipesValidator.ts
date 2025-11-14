@@ -1,11 +1,11 @@
 import  {query, param, validationResult, body} from 'express-validator'
- 
+
 export const IngredientsValidator = [
     query('ingredients')
         .notEmpty()
         .trim()
         .withMessage('Missing ingredients'),
-  
+
     (req, res, next) => {
         const errors = validationResult(req);
         if (!errors.isEmpty){
