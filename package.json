@@ -1,9 +1,17 @@
 {
   "devDependencies": {
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.0",
+    "@testing-library/user-event": "^14.6.1",
+    "@vitejs/plugin-react": "^5.1.1",
     "@vitest/coverage-v8": "^4.0.9",
     "@vitest/ui": "^4.0.8",
     "cz-conventional-changelog": "^3.3.0",
     "dotenv": "^17.2.3",
+    "jsdom": "^27.2.0",
+    "react": "^19.2.0",
+    "react-dom": "^19.2.0",
+    "react-router-dom": "^7.9.6",
     "supertest": "^7.1.4",
     "vitest": "^4.0.8"
   },
@@ -14,7 +22,9 @@
   },
   "scripts": {
     "test": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test:coverage": "vitest run --coverage",
+    "test:client": "vitest client/test",
+    "test:server": "vitest server/test"
   },
   "dependencies": {
     "@types/supertest": "^6.0.3"
