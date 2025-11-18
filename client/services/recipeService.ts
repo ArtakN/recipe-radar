@@ -58,7 +58,7 @@ export async function postFavoriteRecipe(recipeData: object) {
 export async function getFavorites() {
   try {
     const response = await fetch(`${baseURL}/favorites`);
-    if (!response.ok) throw new Error('Failed to fetch favoirtes');
+    if (!response.ok) throw new Error('Failed to fetch favorites');
     return await response.json();
   } catch (error) {
     console.error('Fetch error (getFavorites):', error);

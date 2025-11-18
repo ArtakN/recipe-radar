@@ -1,7 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { mockTomatoDataRecipes } from './mocks/mockTomatoDataRecipes';
 import { mockGreenTomatoSalad } from './mocks/mockGreenTomatoSalad';
-import fs from 'fs';
+import { mockFavoriteGreenTomatoSalad } from './mocks/mockFavoriteGreenTomatoSalad';
 
 test('has title', async ({ page }) => {
   await page.goto('http://localhost:5173/');
@@ -52,9 +52,28 @@ test.describe('Favourites', ()=>{
       await route.fulfill({json});
     });
     
-    if (fs.existsSync('database.sqlite')) {
-     await fs.unlinkSync('database.sqlite');
-    }
+    let favoritesDb:typeof mockFavoriteGreenTomatoSalad = [];
+
+    await page.route('http://localhost:3000/favorites', async (route, request) => {
+      if(route.request().method() === 'POST'){
+        favoritesDb.push(mockFavoriteGreenTomatoSalad[0]);
+        const json = 'added to Favorites';
+        return await route.fulfill({json});
+      } else if (route.request().method() === 'GET') {
+        const json = favoritesDb;
+        await route.fulfill({json});
+      } else {
+        await route.fulfill({
+          status: 404,
+          contentType: 'text/plain',
+          body: 'Not Found!'
+        });
+      }
+    });
+
+    await page.route('http://localhost:3000/favorites/645555', async route => {
+      favoritesDb = [];
+    });
 
     await page.goto('http://localhost:5173/');
   });
@@ -68,8 +87,21 @@ test.describe('Favourites', ()=>{
     await page.getByRole('link', { name: 'reciepe-radar-logo Recipe' }).click();
     await page.getByRole('heading', { name: 'Green Tomato Salad' }).click();
     await page.locator('svg').nth(2).click();
+    await page.waitForSelector('.fill-red-500');
     await page.getByRole('link', { name: 'Favorite Recipes' }).click();
     await expect(page.getByRole('heading', { name: 'Green Tomato Salad' })).toBeVisible();
   });
-  //! The API requested payment. We should never use the real API!
+
+  test('Delete favourite recipe', async ({ page }) => {
+    await page.getByRole('heading', { name: 'Green Tomato Salad' }).click();
+    await page.locator('svg').nth(2).click();
+    await page.waitForSelector('.fill-red-500');
+    await page.getByRole('link', { name: 'Favorite Recipes' }).click();
+    await expect(page.getByRole('heading', { name: 'Green Tomato Salad' })).toBeVisible();
+    await page.getByRole('heading', { name: 'Green Tomato Salad' }).click();
+    await page.locator('svg').nth(2).click();
+    await page.getByRole('link', { name: 'Favorite Recipes' }).click();
+    await expect(page.getByRole('heading', { name: 'Favorite Recipes' })).toBeVisible();
+    await expect(page.getByText('You don\'t have any favorite')).toBeVisible();
+  });
 });

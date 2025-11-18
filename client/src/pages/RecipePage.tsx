@@ -8,7 +8,7 @@ import { postFavoriteRecipe, getFavorites } from '../../services/recipeService';
 
 export default function RecipePage() {
   const [recipeDetails, setRecipeDetails] = useState<Recipe | null>(null);
-  const [isFavorite, setIsVaforite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const { id } = useParams<{ id: string }>();
 
@@ -21,8 +21,8 @@ export default function RecipePage() {
 
         // checking - if the recipe in favorits
         const favorites = await getFavorites();
-        const inFavroite = favorites.some((recipe: Recipe) => recipe.id === Number(id));
-        setIsVaforite(inFavroite);
+        const inFavorite = favorites.some((recipe: Recipe) => recipe.id === Number(id));
+        setIsFavorite(inFavorite);
       } catch (error) {
         console.error('Error fetching recipe details:', error);
       }
@@ -41,11 +41,11 @@ export default function RecipePage() {
       if (isFavorite) {
         await deleteRecipeFromFavorites(recipeDetails.id);
         console.log('Recipe removed from favorites!');
-        setIsVaforite(false);
+        setIsFavorite(false);
       } else {
         await postFavoriteRecipe(recipeDetails);
         console.log('Recipe added to favorites!');
-        setIsVaforite(true);
+        setIsFavorite(true);
       }
     } catch (error) {
       console.error('Failed add/delete favorite:', error);
