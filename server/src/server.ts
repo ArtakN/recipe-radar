@@ -3,7 +3,7 @@ import cors from 'cors';
 import { connectDB } from './db';
 import router from './router';
 
-const app = express();
+export const app = express();
 app.use(cors());
 app.use(express.json());
 app.use(router);

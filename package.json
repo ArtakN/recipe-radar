@@ -1,0 +1,22 @@
+{
+  "devDependencies": {
+    "@vitest/coverage-v8": "^4.0.9",
+    "@vitest/ui": "^4.0.8",
+    "cz-conventional-changelog": "^3.3.0",
+    "dotenv": "^17.2.3",
+    "supertest": "^7.1.4",
+    "vitest": "^4.0.8"
+  },
+  "config": {
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
+  "scripts": {
+    "test": "vitest",
+    "test:coverage": "vitest run --coverage"
+  },
+  "dependencies": {
+    "@types/supertest": "^6.0.3"
+  }
+}

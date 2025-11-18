@@ -1,8 +1,15 @@
 import { Request, Response } from 'express';
 import { Favorite } from '../models/Favorite';
+import { validationResult } from 'express-validator';
 
 // post a favorite recipe
 export async function addFavorite(req: Request, res: Response) {
+  const errors = validationResult(req);
+  console.log(errors);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array()});
+  }
+
   try {
     const { id, title, image, calories, readyInMinutes } = req.body;
 
@@ -39,6 +46,12 @@ export async function getFavorites(req: Request, res: Response) {
 
 // delete a recipe from favorites
 export async function deleteFavorite(req: Request, res: Response) {
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array()});
+  }
+
   try {
     const { id } = req.params;
     const deleted = await Favorite.destroy({ where: { id } });

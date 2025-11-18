@@ -26,7 +26,7 @@ export async function getRandomRecipes() {
 
 export async function getRecipeDetails(id: number) {
   try {
-    const response = await fetch(`${baseURL}/recipes/${id}`);
+    const response = await fetch(`${baseURL}/recipe/${id}`);
     if (!response.ok) throw new Error('Failed to fetch recipe details');
     return await response.json();
   } catch (error) {
