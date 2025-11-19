@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { getRecipeDetails, deleteRecipeFromFavorites } from '../../services/recipeService';
 import type { Recipe, ExtendedIngredient, InstructionStep } from '../types/recipe';
 import { postFavoriteRecipe, getFavorites } from '../../services/recipeService';
+import AIHistory from '../components/AIHistory';
 
 export default function RecipePage() {
   const [recipeDetails, setRecipeDetails] = useState<Recipe | null>(null);
@@ -195,6 +196,11 @@ export default function RecipePage() {
             </div>
           </div>
         )}
+        {/* AI Recipe History */}
+        <div className="mt-12 bg-blue-50 px-6 py-6 rounded-2xl text-gray-600 shadow-lg">
+          <h2 className="text-3xl font-bold mb-6 pt-3">Recipe History</h2>
+          <AIHistory recipe={recipeDetails} />
+        </div>
       </div>
     </div>
   );

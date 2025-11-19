@@ -1,6 +1,7 @@
-import { Request, Response } from 'express';
+import { Request, response, Response } from 'express';
 import 'dotenv/config';
 import { validationResult } from 'express-validator';
+import {recipe} from '../mocks/mockRecipes';
 
 const apiKey = process.env.SPOON_API_KEY;
 
@@ -57,7 +58,7 @@ export async function getRandomRecipes(req: Request, res: Response) {
     res.status(500).json({ error: 'Failed to fetch popular recipes' });
   }
 }
-
+// TODO MOCK FOR TESTING, REMOVE COMMENTS FOR PRODUCTION
 // get single recipe details
 export async function getRecipeDetails(req: Request, res: Response) {
   const errors = validationResult(req);
@@ -79,3 +80,21 @@ export async function getRecipeDetails(req: Request, res: Response) {
     res.status(500).json({ error: 'Failed to fetch recipe details' });
   }
 }
+
+// TODO: MOCK FOR TESTING, COMMENT IT FOR PRODUCTION
+// // get single recipe details
+// export async function getRecipeDetails(req: Request, res: Response) {
+//   const errors = validationResult(req);
+//   if (!errors.isEmpty()) {
+//     return res.status(400).send({ errors: errors.array()});
+//   }
+//   const { id } = req.params;
+
+//   try {
+//     const response = recipe;
+//     res.json(response);
+//   } catch (error) {
+//     console.error('Error fetching recipe details:', error);
+//     res.status(500).json({ error: 'Failed to fetch recipe details' });
+//   }
+// }

@@ -6,7 +6,6 @@ import { AIBehaviour } from '../models/AiBehaviour';
 export async function getAiHistory (req:Request, res:Response) {
   try {
     const { recipe } = req.params;
-    
     const result = streamText({
       model: google('gemini-2.5-flash-lite'),
       messages: [
@@ -21,5 +20,3 @@ export async function getAiHistory (req:Request, res:Response) {
     res.status(500).json({ error: 'Failed to delete favorite' });
   }
 };
-
-
