@@ -5,8 +5,13 @@ import 'dotenv/config';
 import { ApiKeiValidator } from './validators/apiKeyValidator';
 import { IngredientsValidator, RecipeValidator } from './validators/recipesValidator';
 import { IdValidator } from './validators/idValidator';
+import { getAiHistory } from './controllers/aiControlller';
 
 const router = Router();
+
+// Testing 🧪
+router.get('/', (req, res)=>{res.status(200).json('It is alive! 🧟')});
+
 // Recipes
 router.get('/recipes', IngredientsValidator,ApiKeiValidator, getRecipes);
 router.get('/recipes/random',ApiKeiValidator, getRandomRecipes);
@@ -17,7 +22,7 @@ router.post('/favorites',RecipeValidator, addFavorite);
 router.get('/favorites', getFavorites);
 router.delete('/favorites/:id',IdValidator, deleteFavorite);
 
-// Testing 🧪
-router.get('/', (req, res)=>{res.status(200).json('It is alive! 🧟')});
+// AI
+router.get('/ai/:recipe', getAiHistory);
 
 export default router;

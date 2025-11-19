@@ -79,3 +79,18 @@ export async function deleteRecipeFromFavorites(id: number) {
     throw error;
   }
 }
+
+// AI History - Requests to API
+
+export async function getHistory(recipe: string) {
+  try {
+    const response = await fetch(`${baseURL}/ai/${recipe}`);
+    if (!response.ok) throw new Error('Failed to fetch history');
+    const data = await new Response(response.body).text();
+    return data;
+
+  } catch (error) {
+    console.error('Fetch error (getHistory)🚨📜:', error);
+    throw error;
+  }
+}

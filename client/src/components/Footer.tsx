@@ -2,7 +2,6 @@ import { Facebook, Instagram, Youtube } from 'lucide-react';
 
 export default function Footer() {
   return (
-    // TODO: change depricated icons
     <footer className="bg-white border-t border-gray-300 mt-20 py-10 flex flex-col items-center text-gray-500">
       <div className="flex gap-6 mb-6">
         <a href="https://facebook.com" target="_blank" rel="noreferrer">
