@@ -53,4 +53,9 @@ All request validations are now centralized under the validators/ directory.
 
 Express middlewares handle input validation before reaching controllers.
 
+
+## 🔬 Testing 
+
+Implemented testing of the BE,FE and E2E of the app.
+
 ### by MIGUEL & ALFREDO
