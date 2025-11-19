@@ -23,7 +23,7 @@
     }
   },
   "scripts": {
-    "test": "vitest",
+    "test": "vitest client/test server/test",
     "test:coverage": "vitest run --coverage",
     "test:client": "vitest client/test",
     "test:server": "vitest server/test"

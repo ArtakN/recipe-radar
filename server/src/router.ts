@@ -5,7 +5,7 @@ import 'dotenv/config';
 import { ApiKeiValidator } from './validators/apiKeyValidator';
 import { IngredientsValidator, RecipeValidator } from './validators/recipesValidator';
 import { IdValidator } from './validators/idValidator';
-import { getAiHistory } from './controllers/aiControlller';
+import { getAiHistory } from './controllers/aiController';
 
 const router = Router();
 

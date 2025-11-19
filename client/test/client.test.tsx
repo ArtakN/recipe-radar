@@ -6,11 +6,13 @@ import Footer from '../src/components/Footer.tsx';
 import HomePage from '../src/pages/HomePage.tsx';
 import type { Recipe } from '../src/types/recipe';
 import * as recipeService from '../services/recipeService';
+import RecipePage from '../src/pages/RecipePage.tsx';
 
 //! Mock react-router-dom
 const mockNavigate = vi.fn();
 vi.mock('react-router-dom', () => ({
   useNavigate: () => mockNavigate,
+  useParams: () => ({ id: "645555" }),
   Link: ({ to, children }: { to: string; children: React.ReactNode }) => <a href={to}>{children}</a>,
   MemoryRouter: ({ children }: { children: React.ReactNode }) => <>{children}</>,
 }));
@@ -23,6 +25,7 @@ vi.mock('../services/recipeService', () => ({
   postFavoriteRecipe: vi.fn(),
   getFavorites: vi.fn(),
   deleteRecipeFromFavorites: vi.fn(),
+  getHistory: vi.fn(),
 }));
 
 describe('Footer component', () => {
@@ -110,5 +113,55 @@ describe('HomePage component', () => {
     await waitFor(() => {
       expect(screen.getByText('Popular Recipes')).toBeInTheDocument();
     });
+  });
+});
+
+
+describe('RecipePage component', () => {
+  const mockRecipe: Recipe = 
+    {
+      "id": 645555,
+      "image": "https://img.spoonacular.com/recipes/645555-556x370.jpg",
+      "imageType": "jpg",
+      "title": "Green Tomato Salad",
+      "readyInMinutes": 45,
+    };
+  const mockRecipeHistory =  'This is a test history' 
+  
+  beforeEach(() => {
+    vi.clearAllMocks();
+  });
+
+  afterEach(() => {
+    vi.restoreAllMocks();
+  });
+
+  it('renders the recipe title', async () => {
+    vi.mocked(recipeService.getRecipeDetails).mockResolvedValue(mockRecipe);
+    vi.mocked(recipeService.getHistory).mockResolvedValue(mockRecipeHistory);
+
+    render(<RecipePage/>);
+
+    //* Wait for the component to render and check for title text
+    await waitFor(() => {
+      expect(screen.getByText(/Green Tomato Salad/i)).toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/Recipe History/i)).toBeInTheDocument();
+  });
+
+  it('It loads the recipe history', async () => {
+    vi.mocked(recipeService.getRecipeDetails).mockResolvedValue(mockRecipe);
+    vi.mocked(recipeService.getHistory).mockResolvedValue(mockRecipeHistory);
+
+    render(<RecipePage/>);
+
+    //* Wait for the component to render and check for title text
+    await waitFor(() => {
+      expect(screen.getByText(/Green Tomato Salad/i)).toBeInTheDocument();
+    });
+
+    expect(screen.getByText(/Recipe History/i)).toBeInTheDocument();
+    expect(screen.getByText(/This is a test history/i)).toBeInTheDocument();
   });
 });

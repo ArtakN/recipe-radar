@@ -1,24 +1,27 @@
-import { test, beforeEach, afterEach,  vitest, it, vi, describe } from 'vitest';
+import request from 'supertest';
+import { test, vi, describe, beforeAll, afterAll } from 'vitest';
+import { emptyRecipe, emptyId, emptyTitle, emptyImage, recipe, notCorrectId, recipeHistory} from './mocks/mockRecipes';
+
+vi.mock('../src/controllers/aiController', () => ({
+  getAiHistory: vi.fn((req,res) => {
+    return res.json(recipeHistory);
+  })
+}));
+
 import { app } from '../src/server';
 import * as http from 'http';
 
 import { ingredientsEmpty,ingredientsTomato, ingredientsTomatoOnion } from './mocks/mockIngredients';
-import { mockTomatoDataRecipes } from './mocks/mockTomatoDataRecipes';
-import { emptyRecipe, emptyId, emptyTitle, emptyImage, recipe, notCorrectId} from './mocks/mockRecipes';
-
-import request from 'supertest';
 import { idEmpty, idRecipe } from './mocks/mockId';
+import { getAiHistory } from '../src/controllers/aiController'; 
+
 let server: http.Server;
 
-vi.mock('../src/services/recipesService', () => ({
-  getRecipesFromAPI: vi.fn().mockResolvedValue(mockTomatoDataRecipes)
-}));
-
-beforeEach(() => {
+beforeAll(() => {
   server = app.listen();
 });
 
-afterEach(() => {
+afterAll(() => {
   server.close();
 });
 
@@ -29,7 +32,6 @@ test('Server connected', async ({ expect }) => {
   expect(response.body).toBe('It is alive! 🧟');
   server.close();
 });
-
 
 describe('API client test', () =>{
   //* We need to create the .env.test and test/setup.ts to load the new environments before launching the tests. vitest.config.ts is also needed.
@@ -124,5 +126,22 @@ describe('Data Base Favourites client test', () => {
     
     const responseTwice = (await request(server).delete(`/favorites/${recipe.id}`));
     expect(responseTwice.body.error).toBe('Recipe not found in favorites');
+  });
+})
+
+describe('AI API tests', () => {
+
+  test('API returns history of a recipe', async ({expect}) => {
+    const response = await request(server).get('/ai/tomato');
+    console.log(response);
+    expect(getAiHistory).toHaveBeenCalled();  
+    expect(getAiHistory).toHaveBeenCalledWith(
+      expect.objectContaining({
+        params: expect.objectContaining({ recipe: 'tomato' })
+      }),
+      expect.anything(), // res
+      expect.anything()  // next
+    );
+    expect(response.body).toEqual(recipeHistory);
   });
 })
