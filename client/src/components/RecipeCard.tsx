@@ -6,8 +6,6 @@ interface RecipeCardProps {
   recipe: Recipe;
 }
 
-// TODO: Implement add/delete favorite functionality on recipe card
-
 export default function RecipeCard({ recipe }: RecipeCardProps) {
   const navigate = useNavigate();
   function recipeClickHandler() {

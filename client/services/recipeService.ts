@@ -26,7 +26,7 @@ export async function getRandomRecipes() {
 
 export async function getRecipeDetails(id: number) {
   try {
-    const response = await fetch(`${baseURL}/recipes/${id}`);
+    const response = await fetch(`${baseURL}/recipe/${id}`);
     if (!response.ok) throw new Error('Failed to fetch recipe details');
     return await response.json();
   } catch (error) {
@@ -58,7 +58,7 @@ export async function postFavoriteRecipe(recipeData: object) {
 export async function getFavorites() {
   try {
     const response = await fetch(`${baseURL}/favorites`);
-    if (!response.ok) throw new Error('Failed to fetch favoirtes');
+    if (!response.ok) throw new Error('Failed to fetch favorites');
     return await response.json();
   } catch (error) {
     console.error('Fetch error (getFavorites):', error);
@@ -76,6 +76,21 @@ export async function deleteRecipeFromFavorites(id: number) {
     return await response.json();
   } catch (error) {
     console.error('Fetch error (deleteRecipeFromFavorites):', error);
+    throw error;
+  }
+}
+
+// AI History - Requests to API
+
+export async function getHistory(recipe: string) {
+  try {
+    const response = await fetch(`${baseURL}/ai/${recipe}`);
+    if (!response.ok) throw new Error('Failed to fetch history');
+    const data = await new Response(response.body).text();
+    return data;
+
+  } catch (error) {
+    console.error('Fetch error (getHistory)🚨📜:', error);
     throw error;
   }
 }

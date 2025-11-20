@@ -1,23 +1,24 @@
 import { Request, Response } from 'express';
 import 'dotenv/config';
+import { validationResult } from 'express-validator';
 
 const apiKey = process.env.SPOON_API_KEY;
 
 export async function getRecipes(req: Request, res: Response) {
+
+  const errors = validationResult(req);
+  // console.log(errors);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array()});
+  }
+
   const ingredients = req.query.ingredients as string;
 
-  if (!ingredients) {
-    return res.status(400).json({ error: 'Missing ingredients' });
-  }
-
-  if (!apiKey) {
-    return res.status(500).json({ error: 'Missing API key' });
-  }
-
   try {
+    // console.log(ingredients);
     const response = await fetch(
       `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${encodeURIComponent(
-        ingredients,
+        ingredients
       )}&number=6&apiKey=${apiKey}`,
     );
 
@@ -35,10 +36,9 @@ export async function getRecipes(req: Request, res: Response) {
 
 // get random recipes
 export async function getRandomRecipes(req: Request, res: Response) {
-  const apiKey = process.env.SPOON_API_KEY;
-
-  if (!apiKey) {
-    return res.status(500).json({ error: 'Missing API key' });
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array()});
   }
 
   try {
@@ -57,10 +57,14 @@ export async function getRandomRecipes(req: Request, res: Response) {
     res.status(500).json({ error: 'Failed to fetch popular recipes' });
   }
 }
-
+// TODO MOCK FOR TESTING, REMOVE COMMENTS FOR PRODUCTION
 // get single recipe details
 export async function getRecipeDetails(req: Request, res: Response) {
-  const apiKey = process.env.SPOON_API_KEY;
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).send({ errors: errors.array()});
+  }
+
   const { id } = req.params;
 
   try {
@@ -75,3 +79,21 @@ export async function getRecipeDetails(req: Request, res: Response) {
     res.status(500).json({ error: 'Failed to fetch recipe details' });
   }
 }
+
+// TODO: MOCK FOR TESTING, COMMENT IT FOR PRODUCTION
+// // get single recipe details
+// export async function getRecipeDetails(req: Request, res: Response) {
+//   const errors = validationResult(req);
+//   if (!errors.isEmpty()) {
+//     return res.status(400).send({ errors: errors.array()});
+//   }
+//   const { id } = req.params;
+
+//   try {
+//     const response = recipe;
+//     res.json(response);
+//   } catch (error) {
+//     console.error('Error fetching recipe details:', error);
+//     res.status(500).json({ error: 'Failed to fetch recipe details' });
+//   }
+// }

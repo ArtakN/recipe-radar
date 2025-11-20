@@ -1,10 +1,13 @@
-# Node
+code # Node
 node_modules/
 dist/
 build/
 coverage/
 .env
 .env.local
+
+# Gits
+*.gitconfig
 
 # Logs
 *.log
@@ -32,3 +35,10 @@ client/node_modules/
 # Server build output
 server/dist/
 server/node_modules/
+
+# Playwright
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/
+/playwright/.auth/

@@ -1,6 +1,7 @@
 # 🍳 Recipe Radar
+[![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 
-**Recipe Radar** is a full-stack web app that helps you discover new meals  
+**Recipe Radar** is a full-stack web app that helps you discover new meals
 based on the ingredients you already have — powered by the [Spoonacular API](https://spoonacular.com/food-api).
 
 ---
@@ -64,6 +65,6 @@ npm run dev
 
 Create `.env` in `/server`:
 
-SPOONACULAR_API_KEY=your_api_key_here
+SPOON_API_KEY=your_api_key_here
 
 You can get an API key here: https://spoonacular.com/food-api/console#Profile
