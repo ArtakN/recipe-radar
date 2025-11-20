@@ -94,6 +94,9 @@ End-to-End (E2E)
 
 This guarantees correctness, stability, and confidence across the entire application.
 
-
+### 🧪 Testing Badges
+![Vitest](https://img.shields.io/badge/Tests-Vitest-purple?logo=vitest)
+![Playwright](https://img.shields.io/badge/E2E-Playwright-green?logo=playwright)
+![RTL](https://img.shields.io/badge/Testing%20Library-React-red?logo=testing-library)
 
 ### by MIGUEL & ALFREDO

@@ -85,8 +85,6 @@ test.describe('Favourites', ()=>{
     await page.goto('http://localhost:5173/');
   });
 
-
-
   test('Add favourite recipe', async ({ page }) => {
     await page.getByRole('link', { name: 'Favorite Recipes' }).click();
     await expect(page.getByRole('heading', { name: 'Favorite Recipes' })).toBeVisible();
