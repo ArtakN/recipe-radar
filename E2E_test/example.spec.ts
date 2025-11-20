@@ -52,6 +52,11 @@ test.describe('Favourites', ()=>{
       await route.fulfill({json});
     });
     
+    await page.route('http://localhost:3000/ai/Green%20Tomato%20Salad', async route => {
+      const json = 'This is a mock history';
+      await route.fulfill({json});
+    });
+
     let favoritesDb:typeof mockFavoriteGreenTomatoSalad = [];
 
     await page.route('http://localhost:3000/favorites', async (route, request) => {
@@ -73,6 +78,8 @@ test.describe('Favourites', ()=>{
 
     await page.route('http://localhost:3000/favorites/645555', async route => {
       favoritesDb = [];
+      const json = 'Recipe deleted';
+      return await route.fulfill({json});
     });
 
     await page.goto('http://localhost:5173/');
@@ -103,5 +110,61 @@ test.describe('Favourites', ()=>{
     await page.getByRole('link', { name: 'Favorite Recipes' }).click();
     await expect(page.getByRole('heading', { name: 'Favorite Recipes' })).toBeVisible();
     await expect(page.getByText('You don\'t have any favorite')).toBeVisible();
+  });
+});
+
+//* Test Recipe Page with recipe history
+test.describe('Recipe page history', ()=>{
+
+  test.beforeEach(async ({ page }) => {
+    await page.route('http://localhost:3000/recipes/random', async route => {
+      const json = mockTomatoDataRecipes;
+      await route.fulfill({json});
+    });
+
+    await page.route('http://localhost:3000/ai/Green%20Tomato%20Salad', async route => {
+      const json = 'This is a mock history';
+      await route.fulfill({json});
+    });
+    
+    await page.route('http://localhost:3000/recipe/645555', async route => {
+      const json = mockGreenTomatoSalad;
+      await route.fulfill({json});
+    });
+
+    let favoritesDb:typeof mockFavoriteGreenTomatoSalad = [];
+
+    await page.route('http://localhost:3000/favorites', async (route, request) => {
+      if(route.request().method() === 'POST'){
+        favoritesDb.push(mockFavoriteGreenTomatoSalad[0]);
+        const json = 'added to Favorites';
+        return await route.fulfill({json});
+      } else if (route.request().method() === 'GET') {
+        const json = favoritesDb;
+        await route.fulfill({json});
+      } else {
+        await route.fulfill({
+          status: 404,
+          contentType: 'text/plain',
+          body: 'Not Found!'
+        });
+      }
+    });
+
+    await page.route('http://localhost:3000/favorites/645555', async route => {
+      favoritesDb = [];
+    });
+
+    await page.goto('http://localhost:5173/');
+  });
+
+  test('Should apear "Recipe History" title', async ({ page }) => {
+    await page.getByRole('heading', { name: 'Green Tomato Salad' }).click();
+    await expect(page.getByRole('heading', { name: 'Recipe History' })).toBeVisible();
+  });
+
+  test('Delete favourite recipe', async ({ page }) => {
+    await page.getByRole('heading', { name: 'Green Tomato Salad' }).click();
+    await expect(page.getByText('This is a mock history')).toBeVisible();
   });
 });
