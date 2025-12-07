@@ -1,69 +1,98 @@
+---
+
 # 🍳 Recipe Radar
 
-**Recipe Radar** is a full-stack web app that helps you discover new meals  
-based on the ingredients you already have — powered by the [Spoonacular API](https://spoonacular.com/food-api).
+**Recipe Radar** — это современное full-stack веб-приложение, которое помогает находить новые блюда по ингредиентам, которые у вас уже есть.
+Использует **Spoonacular API**, быстрый фронтенд на **React**, и лёгкий backend на **Node.js + SQLite**.
 
 ---
 
 ## 🚀 Features
 
-- 🔍 Search recipes by ingredients
-- 🧠 View detailed recipe info
-- 🎲 Discover popular or random meals
-- ❤️ Save your favorite recipes
+* 🔍 Поиск рецептов по ингредиентам
+* 📖 Детальная страница рецепта
+* 🎲 Популярные и случайные блюда
+* ❤️ Добавление рецептов в избранное
+* ⚡ Быстрый интерактивный UI (React + Tailwind)
+* 🔗 API-интеграция с Spoonacular
 
 ---
 
 ## 🛠 Tech Stack
 
-### Frontend
+### **Frontend**
 
-- React 19
-- TypeScript
-- Vite
-- Tailwind CSS
+* React 19
+* TypeScript
+* Vite
+* Tailwind CSS
 
-### Backend
+### **Backend**
 
-- Node.js / Express
-- TypeScript
-- SQLite
-- Spoonacular API
+* Node.js
+* Express
+* TypeScript
+* SQLite
+* Spoonacular API
 
 ---
 
-## 🧰 Installation
+## 🔧 Installation & Setup
 
-# Clone repo
+### 1. Clone the repository
 
-git clone https://github.com/<your-username>/recipe-radar.git
+```bash
+git clone https://github.com/ArtakN/recipe-radar.git
 cd recipe-radar
+```
 
-# Install dependencies for both client and server
+### 2. Install dependencies
 
-cd client && npm install
-cd server && npm install
+#### Client
+
+```bash
+cd client
+npm install
+```
+
+#### Server
+
+```bash
+cd server
+npm install
+```
 
 ---
 
-## ▶️ Run the app
+## ▶️ Running the App
 
-# Backend
+### **Backend**
 
+```bash
 cd server
-npm run dev # runs nodemon src/server.ts
+npm run dev   # nodemon src/server.ts
+```
 
-# Frontend (in another terminal)
+### **Frontend** (в отдельном терминале)
 
-cd ../client
+```bash
+cd client
 npm run dev
+```
 
 ---
 
 ## 🔑 Environment Variables
 
-Create `.env` in `/server`:
+Создайте файл `.env` в `/server`:
 
+```
 SPOONACULAR_API_KEY=your_api_key_here
+```
 
-You can get an API key here: https://spoonacular.com/food-api/console#Profile
+Получить ключ можно здесь:
+[https://spoonacular.com/food-api/console#Profile](https://spoonacular.com/food-api/console#Profile)
+
+---
+
+
