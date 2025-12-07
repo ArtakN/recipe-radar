@@ -1,20 +1,17 @@
----
-
 # 🍳 Recipe Radar
 
-**Recipe Radar** — это современное full-stack веб-приложение, которое помогает находить новые блюда по ингредиентам, которые у вас уже есть.
-Использует **Spoonacular API**, быстрый фронтенд на **React**, и лёгкий backend на **Node.js + SQLite**.
+**Recipe Radar** is a full-stack web application that helps you discover new meals
+based on the ingredients you already have — powered by the
+[Spoonacular API](https://spoonacular.com/food-api).
 
 ---
 
 ## 🚀 Features
 
-* 🔍 Поиск рецептов по ингредиентам
-* 📖 Детальная страница рецепта
-* 🎲 Популярные и случайные блюда
-* ❤️ Добавление рецептов в избранное
-* ⚡ Быстрый интерактивный UI (React + Tailwind)
-* 🔗 API-интеграция с Spoonacular
+* 🔍 Search recipes by ingredients
+* 🧠 View detailed recipe information
+* 🎲 Explore popular and random meals
+* ❤️ Save your favorite recipes
 
 ---
 
@@ -29,24 +26,23 @@
 
 ### **Backend**
 
-* Node.js
-* Express
+* Node.js / Express
 * TypeScript
 * SQLite
 * Spoonacular API
 
 ---
 
-## 🔧 Installation & Setup
+## 🧰 Installation
 
-### 1. Clone the repository
+### **1. Clone the repository**
 
 ```bash
-git clone https://github.com/ArtakN/recipe-radar.git
+git clone https://github.com/<your-username>/recipe-radar.git
 cd recipe-radar
 ```
 
-### 2. Install dependencies
+### **2. Install dependencies (client & server)**
 
 #### Client
 
@@ -58,7 +54,7 @@ npm install
 #### Server
 
 ```bash
-cd server
+cd ../server
 npm install
 ```
 
@@ -66,14 +62,14 @@ npm install
 
 ## ▶️ Running the App
 
-### **Backend**
+### **Start the backend**
 
 ```bash
 cd server
-npm run dev   # nodemon src/server.ts
+npm run dev   # runs nodemon src/server.ts
 ```
 
-### **Frontend** (в отдельном терминале)
+### **Start the frontend (in a separate terminal)**
 
 ```bash
 cd client
@@ -84,15 +80,14 @@ npm run dev
 
 ## 🔑 Environment Variables
 
-Создайте файл `.env` в `/server`:
+Create a `.env` file inside the `/server` directory:
 
 ```
 SPOONACULAR_API_KEY=your_api_key_here
 ```
 
-Получить ключ можно здесь:
+Get your API key here:
 [https://spoonacular.com/food-api/console#Profile](https://spoonacular.com/food-api/console#Profile)
 
 ---
-
 
