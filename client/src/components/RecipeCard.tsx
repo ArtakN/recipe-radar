@@ -6,10 +6,9 @@ interface RecipeCardProps {
   recipe: Recipe;
 }
 
-// TODO: Implement add/delete favorite functionality on recipe card
-
 export default function RecipeCard({ recipe }: RecipeCardProps) {
   const navigate = useNavigate();
+
   function recipeClickHandler() {
     navigate(`/recipe/${recipe.id}`);
   }
@@ -17,15 +16,16 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
   const calories = recipe.nutrition?.nutrients?.find(
     (nutrient) => nutrient.name === 'Calories',
   )?.amount;
+  const ratings = recipe.likes ?? recipe.aggregateLikes ?? 0;
 
   return (
     <div
-      className="min-w-[500px] bg-white rounded-2xl shadow-lg hover:shadow-lg transition overflow-hidden group hover:cursor-pointer flex flex-col"
+      className="w-full max-w-[500px] bg-white rounded-2xl shadow-lg hover:shadow-xl transition overflow-hidden group hover:cursor-pointer flex flex-col"
       onClick={recipeClickHandler}>
       <img
         src={recipe.image}
-        alt="recipe-image"
-        className="w-full h-[200px] object-cover transition-transform duration-500 ease-out group-hover:scale-110"
+        alt={recipe.title}
+        className="w-full h-[220px] object-cover transition-transform duration-500 ease-out group-hover:scale-105"
       />
 
       <div className="p-4 pb-5 flex flex-col grow justify-between">
@@ -33,17 +33,16 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
 
         <div className="mt-auto">
           <div className="flex items-center mb-4 justify-between">
-            <div className="flex items-center gap-1 ">
+            <div className="flex items-center gap-1">
               <Star className="text-yellow-400 fill-yellow-400 w-5 h-5" />
               <Star className="text-yellow-400 fill-yellow-400 w-5 h-5" />
               <Star className="text-yellow-400 fill-yellow-400 w-5 h-5" />
               <Star className="text-yellow-400 fill-yellow-400 w-5 h-5" />
               <Star className="text-gray-300 w-5 h-5" />
-              <p className="text-green-600 text-sm ml-2 font-medium">{recipe.likes} ratings</p>
+              <p className="text-green-600 text-sm ml-2 font-medium">{ratings} ratings</p>
             </div>
           </div>
 
-          {/* Time & Calories */}
           <div className="flex justify-between items-center">
             <div className="flex items-center text-sm text-gray-600 gap-6">
               {recipe.readyInMinutes && (
@@ -61,7 +60,6 @@ export default function RecipeCard({ recipe }: RecipeCardProps) {
             </div>
           </div>
 
-          {/* Diet tags */}
           <div className="flex flex-wrap gap-2 mt-5">
             {recipe.diets?.slice(0, 3).map((diet) => (
               <span

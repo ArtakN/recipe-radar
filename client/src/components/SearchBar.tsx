@@ -22,7 +22,7 @@ export default function SearchBar({ setFetchedRecipes, setListTitle }: SearchBar
       setListTitle(`Search results for '${ingredients}'`);
       setIngredients('');
     } catch (error) {
-      console.log('Error fetching recipes:', error);
+      console.error('Error fetching recipes:', error);
     } finally {
       setLoading(false);
     }
@@ -37,11 +37,18 @@ export default function SearchBar({ setFetchedRecipes, setListTitle }: SearchBar
         placeholder="Search recipes..."
         value={ingredients}
         onChange={(e) => setIngredients(e.target.value)}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter') {
+            void handleSearch();
+          }
+        }}
       />
       <button
         disabled={loading || !ingredients.trim()}
-        className="bg-emerald-500 px-4 rounded-full text-white absolute right-1 top-1/2 -translate-y-1/2 h-10 w-32 font-semibold shadow-md hover:bg-emerald-600 transition cursor-pointer"
-        onClick={handleSearch}>
+        className="bg-emerald-500 px-4 rounded-full text-white absolute right-1 top-1/2 -translate-y-1/2 h-10 w-32 font-semibold shadow-md hover:bg-emerald-600 transition cursor-pointer disabled:cursor-not-allowed disabled:bg-emerald-300"
+        onClick={() => {
+          void handleSearch();
+        }}>
         {loading ? 'Searching...' : 'Search'}
       </button>
     </div>

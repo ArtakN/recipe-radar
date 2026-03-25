@@ -5,6 +5,7 @@ build/
 coverage/
 .env
 .env.local
+.env.*.local
 
 # Logs
 *.log
@@ -28,7 +29,12 @@ Thumbs.db
 client/dist/
 client/.vite/
 client/node_modules/
+client/.npm-cache/
 
 # Server build output
 server/dist/
 server/node_modules/
+
+# Firebase
+.firebase/
+firebase-debug.log

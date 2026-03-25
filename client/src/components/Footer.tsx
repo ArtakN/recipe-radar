@@ -1,27 +1,31 @@
-import { Facebook, Instagram, Youtube } from 'lucide-react';
-
 export default function Footer() {
   return (
-    // TODO: change depricated icons
-    <footer className="bg-white border-t border-gray-300 mt-20 py-10 flex flex-col items-center text-gray-500">
-      <div className="flex gap-6 mb-6">
-        <a href="https://facebook.com" target="_blank" rel="noreferrer">
-          <Facebook className="w-6 h-6 hover:text-emerald-500 transition-colors" />
-        </a>
-        <a href="https://instagram.com" target="_blank" rel="noreferrer">
-          <Instagram className="w-6 h-6 hover:text-emerald-500 transition-colors" />
-        </a>
-        <a href="https://youtube.com" target="_blank" rel="noreferrer">
-          <Youtube className="w-6 h-6 hover:text-emerald-500 transition-colors" />
-        </a>
+    <footer className="mt-20 border-t border-gray-200 bg-white py-10 text-center text-gray-500">
+      <div className="mx-auto flex max-w-5xl flex-col items-center gap-4 px-4">
+        <div className="flex gap-4 text-sm font-medium">
+          <a
+            href="https://github.com/ArtakN/recipe-radar"
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full border border-gray-200 px-4 py-2 text-gray-600 transition-colors hover:border-emerald-500 hover:text-emerald-600">
+            GitHub Repo
+          </a>
+          <a
+            href="https://portfolio-app-94139.web.app/"
+            target="_blank"
+            rel="noreferrer"
+            className="rounded-full border border-gray-200 px-4 py-2 text-gray-600 transition-colors hover:border-emerald-500 hover:text-emerald-600">
+            View Portfolio
+          </a>
+        </div>
+
+        <p className="text-sm text-gray-500">© 2026 Recipe Radar. All rights reserved.</p>
+
+        <p className="max-w-lg text-center text-xs italic text-gray-400">
+          Recipe Radar provides content for informational purposes only and is not a replacement for
+          professional dietary or medical advice.
+        </p>
       </div>
-
-      <p className="text-sm text-gray-500">Â© 2025 Recipe Radar. All Rights Reserved.</p>
-
-      <p className="text-xs italic text-gray-400 mt-2 text-center max-w-lg">
-        Recipe Radar provides content for informational and educational purposes only. It is not
-        intended to replace professional dietary or medical advice.
-      </p>
     </footer>
   );
 }

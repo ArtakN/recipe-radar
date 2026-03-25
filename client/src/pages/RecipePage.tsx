@@ -1,4 +1,5 @@
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 import { Clock, Flame, Heart } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
@@ -29,7 +30,7 @@ export default function RecipePage() {
       }
     }
 
-    loadRecipeDetails();
+    void loadRecipeDetails();
   }, [id]);
 
   const calories =
@@ -93,7 +94,7 @@ export default function RecipePage() {
           <div className="w-[500px] flex justify-end">
             <img
               src={recipeDetails?.image}
-              alt="recipe"
+              alt={recipeDetails?.title ?? 'Recipe'}
               className="w-[500px] h-[700px] rounded-2xl object-cover shadow-lg"
             />
           </div>
@@ -179,6 +180,7 @@ export default function RecipePage() {
           </div>
         )}
       </div>
+      <Footer />
     </div>
   );
 }

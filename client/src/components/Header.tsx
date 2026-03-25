@@ -7,14 +7,14 @@ interface HeaderProps {
 
 export default function Header({ logoColor }: HeaderProps) {
   return (
-    <div className="flex items-center justify-between">
-      <Link to={'/'}>
+    <div className="flex items-center justify-between gap-6">
+      <Link to="/">
         <div className="flex items-center cursor-pointer">
-          <img src={logo} alt="reciepe-radar-logo" className="w-20" />
+          <img src={logo} alt="Recipe Radar logo" className="w-20" />
           <p className={`text-4xl font-semibold ${logoColor} drop-shadow-lg`}>Recipe Radar</p>
         </div>
       </Link>
-      <Link to={'/favorites'}>
+      <Link to="/favorites">
         <p className={`text-xl font-semibold ${logoColor} drop-shadow-lg hover:text-emerald-400`}>
           Favorite Recipes
         </p>
