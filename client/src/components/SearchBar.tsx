@@ -14,6 +14,7 @@ export default function SearchBar({ setFetchedRecipes, setListTitle }: SearchBar
 
   async function handleSearch() {
     if (!ingredients.trim()) return;
+
     try {
       setLoading(true);
       const data = await getRecipes(ingredients);
@@ -41,7 +42,7 @@ export default function SearchBar({ setFetchedRecipes, setListTitle }: SearchBar
         disabled={loading || !ingredients.trim()}
         className="bg-emerald-500 px-4 rounded-full text-white absolute right-1 top-1/2 -translate-y-1/2 h-10 w-32 font-semibold shadow-md hover:bg-emerald-600 transition cursor-pointer"
         onClick={handleSearch}>
-        {loading ? 'Searching…' : 'Search'}
+        {loading ? 'Searching...' : 'Search'}
       </button>
     </div>
   );

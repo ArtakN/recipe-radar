@@ -2,13 +2,17 @@ import Header from '../components/Header';
 import { Clock, Flame, Heart } from 'lucide-react';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { getRecipeDetails, deleteRecipeFromFavorites } from '../../services/recipeService';
+import { getRecipeDetails } from '../../services/recipeService';
 import type { Recipe, ExtendedIngredient, InstructionStep } from '../types/recipe';
-import { postFavoriteRecipe, getFavorites } from '../../services/recipeService';
+import {
+  addFavoriteRecipe,
+  deleteFavoriteRecipe,
+  isFavoriteRecipe,
+} from '../../services/favoritesService';
 
 export default function RecipePage() {
   const [recipeDetails, setRecipeDetails] = useState<Recipe | null>(null);
-  const [isFavorite, setIsVaforite] = useState(false);
+  const [isFavorite, setIsFavorite] = useState(false);
 
   const { id } = useParams<{ id: string }>();
 
@@ -16,13 +20,10 @@ export default function RecipePage() {
     async function loadRecipeDetails() {
       try {
         if (!id) return;
-        const data = await getRecipeDetails(Number(id));
+        const recipeId = Number(id);
+        const data = await getRecipeDetails(recipeId);
         setRecipeDetails(data);
-
-        // checking - if the recipe in favorits
-        const favorites = await getFavorites();
-        const inFavroite = favorites.some((recipe: Recipe) => recipe.id === Number(id));
-        setIsVaforite(inFavroite);
+        setIsFavorite(isFavoriteRecipe(recipeId));
       } catch (error) {
         console.error('Error fetching recipe details:', error);
       }
@@ -34,38 +35,32 @@ export default function RecipePage() {
   const calories =
     recipeDetails?.nutrition?.nutrients?.find((n) => n.name === 'Calories')?.amount ?? 'N/A';
 
-  async function favoriteClickHandle() {
+  function favoriteClickHandle() {
     if (!recipeDetails) return;
 
-    try {
-      if (isFavorite) {
-        await deleteRecipeFromFavorites(recipeDetails.id);
-        console.log('Recipe removed from favorites!');
-        setIsVaforite(false);
-      } else {
-        await postFavoriteRecipe(recipeDetails);
-        console.log('Recipe added to favorites!');
-        setIsVaforite(true);
-      }
-    } catch (error) {
-      console.error('Failed add/delete favorite:', error);
+    if (isFavorite) {
+      deleteFavoriteRecipe(recipeDetails.id);
+      setIsFavorite(false);
+      return;
     }
+
+    addFavoriteRecipe(recipeDetails);
+    setIsFavorite(true);
   }
 
   return (
     <div className="min-h-screen bg-white">
       <div className="shadow-sm">
-        <div className=" mx-auto px-50 py-4 shadow-sm w-full">
+        <div className="mx-auto px-50 py-4 shadow-sm w-full">
           <Header logoColor="text-gray-800" />
         </div>
       </div>
 
       <div className="container mx-auto px-4 py-10 w-6xl">
-        <div className="flex flex-row gap-8 mb-12  justify-between items-start">
+        <div className="flex flex-row gap-8 mb-12 justify-between items-start">
           <div className="lg:flex-1">
             <div className="flex items-center text-lg text-emerald-700 gap-6 mb-8">
               <div className="flex w-full">
-                {/* Time */}
                 <div className="flex items-center gap-2">
                   <Clock className="w-6 h-6" />
                   <p>
@@ -73,48 +68,37 @@ export default function RecipePage() {
                     min
                   </p>
                 </div>
-                {/* Calories */}
                 <div className="flex items-center gap-2">
                   <Flame className="w-6 h-6" />
                   <p>
                     <span className="text-3xl font-bold mr-1">{calories}</span> Calories
                   </p>
                 </div>
-                {/* Favorite */}
-                <div onClick={favoriteClickHandle} className="ml-auto">
+                <button type="button" onClick={favoriteClickHandle} className="ml-auto">
                   <Heart
-                    className={` ${
+                    className={`${
                       isFavorite ? 'fill-red-500 text-red-500' : 'text-gray-500'
-                    }  transition-colors duration-200 cursor-pointer w-10 h-10 hover:text-red-500`}
+                    } transition-colors duration-200 cursor-pointer w-10 h-10 hover:text-red-500`}
                   />
-                </div>
+                </button>
               </div>
             </div>
-            {/* Title */}
             <h1 className="text-5xl font-bold mb-6">{recipeDetails?.title}</h1>
-            {/* Descripton */}
             <div
               className="text-lg text-gray-700 leading-relaxed"
               dangerouslySetInnerHTML={{ __html: recipeDetails?.summary || '' }}
             />
           </div>
 
-          {/* Main image */}
           <div className="w-[500px] flex justify-end">
             <img
               src={recipeDetails?.image}
-              alt="recipe-image"
+              alt="recipe"
               className="w-[500px] h-[700px] rounded-2xl object-cover shadow-lg"
-              style={{
-                width: '500px',
-                height: '700px',
-                objectFit: 'cover',
-              }}
             />
           </div>
         </div>
 
-        {/* Ingridinets */}
         {recipeDetails?.extendedIngredients && (
           <div className="mb-12">
             <div className="flex items-center justify-between mb-6">
@@ -124,7 +108,7 @@ export default function RecipePage() {
               </p>
             </div>
 
-            <div className="bg-white rounded-2xl p-6 shadow-sm ">
+            <div className="bg-white rounded-2xl p-6 shadow-sm">
               <div className="grid gap-4">
                 {recipeDetails.extendedIngredients.map((ingredient: ExtendedIngredient) => (
                   <div
@@ -153,11 +137,10 @@ export default function RecipePage() {
           </div>
         )}
 
-        {/* Instructon */}
         {recipeDetails?.analyzedInstructions?.[0]?.steps && (
           <div className="mb-12">
             <h2 className="text-3xl font-bold mb-6">Recipe Steps</h2>
-            <div className="bg-white rounded-2xl p-6 shadow-sm ">
+            <div className="bg-white rounded-2xl p-6 shadow-sm">
               <div className="space-y-6">
                 {recipeDetails.analyzedInstructions[0].steps.map((step: InstructionStep) => (
                   <div key={step.number} className="flex gap-4">
@@ -169,7 +152,7 @@ export default function RecipePage() {
 
                       {step.ingredients && step.ingredients.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-2">
-                          <span className="text-sm text-gray-600">Ingredients: </span>
+                          <span className="text-sm text-gray-600">Ingredients:</span>
                           {step.ingredients.map((ingredient, index: number) => (
                             <span key={index} className="text-sm bg-gray-100 px-2 py-1 rounded">
                               {ingredient.localizedName}
@@ -180,7 +163,7 @@ export default function RecipePage() {
 
                       {step.equipment && step.equipment.length > 0 && (
                         <div className="flex flex-wrap gap-2 mt-1">
-                          <span className="text-sm text-gray-600">Equipment: </span>
+                          <span className="text-sm text-gray-600">Equipment:</span>
                           {step.equipment.map((equip, index: number) => (
                             <span key={index} className="text-sm bg-blue-100 px-2 py-1 rounded">
                               {equip.localizedName}

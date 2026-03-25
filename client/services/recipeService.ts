@@ -1,81 +1,46 @@
-const baseURL = 'http://localhost:3000';
+import type { Recipe } from '../src/types/recipe';
 
-// Recipes - Resquests to spoonacular API
+const apiKey = import.meta.env.VITE_SPOON_API_KEY;
+const apiBaseUrl = 'https://api.spoonacular.com';
+
+function getUrl(path: string, params: Record<string, string>) {
+  if (!apiKey) {
+    throw new Error('Missing Spoonacular API key. Set VITE_SPOON_API_KEY in the client environment.');
+  }
+
+  const searchParams = new URLSearchParams({ ...params, apiKey });
+  return `${apiBaseUrl}${path}?${searchParams.toString()}`;
+}
+
+async function request<T>(path: string, params: Record<string, string>) {
+  const response = await fetch(getUrl(path, params));
+
+  if (!response.ok) {
+    throw new Error(`Request failed with status ${response.status}`);
+  }
+
+  return (await response.json()) as T;
+}
 
 export async function getRecipes(ingredients: string) {
-  try {
-    const response = await fetch(`${baseURL}/recipes?ingredients=${ingredients}`);
-    if (!response.ok) throw new Error('Failed to fetch recipes');
-    return await response.json();
-  } catch (error) {
-    console.error('Fetch error (getRecipes):', error);
-    throw error;
-  }
+  return request<Recipe[]>('/recipes/findByIngredients', {
+    ingredients,
+    number: '6',
+  });
 }
 
 export async function getRandomRecipes() {
-  try {
-    const response = await fetch(`${baseURL}/recipes/random`);
-    if (!response.ok) throw new Error('Failed to fetch recipes');
-    return await response.json();
-  } catch (error) {
-    console.error('Fetch error (getRandomRecipes):', error);
-    throw error;
-  }
+  const data = await request<{ results: Recipe[] }>('/recipes/complexSearch', {
+    sort: 'popularity',
+    number: '8',
+    addRecipeInformation: 'true',
+  });
+
+  return data.results;
 }
 
 export async function getRecipeDetails(id: number) {
-  try {
-    const response = await fetch(`${baseURL}/recipes/${id}`);
-    if (!response.ok) throw new Error('Failed to fetch recipe details');
-    return await response.json();
-  } catch (error) {
-    console.error('Fetch error (getRecipeDetails):', error);
-    throw error;
-  }
-}
-
-// Favorite Recipes - Requests to local db
-
-export async function postFavoriteRecipe(recipeData: object) {
-  try {
-    const response = await fetch(`${baseURL}/favorites`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(recipeData),
-    });
-
-    if (!response.ok) throw new Error('Failed to save favorite recipe');
-    return await response.json();
-  } catch (error) {
-    console.error('Fetch error (postFavoriteRecipe):', error);
-    throw error;
-  }
-}
-
-export async function getFavorites() {
-  try {
-    const response = await fetch(`${baseURL}/favorites`);
-    if (!response.ok) throw new Error('Failed to fetch favoirtes');
-    return await response.json();
-  } catch (error) {
-    console.error('Fetch error (getFavorites):', error);
-    throw error;
-  }
-}
-
-export async function deleteRecipeFromFavorites(id: number) {
-  try {
-    const response = await fetch(`${baseURL}/favorites/${id}`, {
-      method: 'DELETE',
-    });
-
-    if (!response.ok) throw new Error('Failed to delete favorite recipe');
-    return await response.json();
-  } catch (error) {
-    console.error('Fetch error (deleteRecipeFromFavorites):', error);
-    throw error;
-  }
+  return request<Recipe>(`/recipes/${id}/information`, {
+    includeNutrition: 'true',
+  });
 }

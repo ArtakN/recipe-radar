@@ -34,13 +34,12 @@ export default function HomePage() {
           backgroundColor: 'rgba(0, 0, 0, 0.55)',
           backgroundBlendMode: 'darken',
         }}>
-        <div className=" mx-auto px-50 pt-10 w-full">
+        <div className="mx-auto px-50 pt-10 w-full">
           <Header logoColor="text-white" />
         </div>
-        {/* Hero section */}
         <div className="w-1/3 my-auto">
           <h2 className="text-4xl font-semibold text-white text-center drop-shadow-lg mb-10">
-            Find the Perfect Recipe with What’s Already in Your Fridge
+            Find the Perfect Recipe with What&apos;s Already in Your Fridge
           </h2>
           <SearchBar setFetchedRecipes={setFetchedRecipes} setListTitle={setListTitle} />
         </div>
